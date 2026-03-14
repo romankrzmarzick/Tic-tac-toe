@@ -41,11 +41,13 @@ class Interface:
             if 0 < len(name) <= 15:
                 break
             elif not len(name):
-                self.con.print("Name is Empty: enter a valid one please.", style=self.styles["lose"])
+                self.con.print("Name is Empty: enter a valid one please.", style=self.styles["body"])
             else:
-                self.con.print("Name is over 15 Characters: enter a new one please.", style=self.styles["lose"])
+                self.con.print("Name is over 15 Characters: enter a new one please.", style=self.styles["body"])
         
         return name
 
     def invalid_move_message(self):
         self.con.print("Invalid move: try again.", style=self.styles['body'])
+
+    

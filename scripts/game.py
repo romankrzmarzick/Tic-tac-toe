@@ -42,14 +42,36 @@ class Game:
     def check_for_win(self):
         # Checks for win in each row.
         for row in self.board:
-            if not " " in row and len(set(row)) <= 1:
-                return True
+            symbol = row[0]
+            common_row = len(set(row))
+            if not " " in row and common_row <= 1:
+                return True, symbol
         
         # Checks for win in each column.
         for i in range(self.sqr_wt):
             column = [row[i] for row in self.board]
-            if not " " in column and len(set(column)) <= 1:
-                return True
+            common_column = len(set(column))
+            if not " " in column and common_column <= 1:
+                return True, column[0]
 
-        return False
+        # Checks for win in diagnal from top-left to bottom-right
+        top_left_diagnal = []
+        for i in range(self.sqr_wt):
+           top_left_diagnal.append(self.board[i][i])
+        
+        common_left_diagnal = len(set(top_left_diagnal))
+        if not " " in top_left_diagnal and common_left_diagnal <= 1:
+                return True, top_left_diagnal[0]
+
+        # Checks for win in diagnal from top-right to bottom-left
+        top_right_diagnal = []
+        for i in range(self.sqr_wt):
+            top_right_diagnal.append(self.board[(self.sqr_wt-1) - i][i])
+        print(top_right_diagnal)
+        common_right_diagnal = len(set(top_right_diagnal))
+        if not " " in top_right_diagnal and common_right_diagnal <= 1:
+                return True, top_right_diagnal[0]
+
+
+        return False, None
         

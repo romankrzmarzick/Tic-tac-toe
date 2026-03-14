@@ -2,8 +2,6 @@ from scripts.character import Character
 from scripts.game import Game
 from scripts.interface import Interface
 
-
-
 def play_turn(ui, game, player_symbol, name):
     while True:
         position = ui.choose_position(game.sqr_wt, name )
@@ -23,7 +21,25 @@ def run():
     while True:
 
         play_turn(ui, game, p1.symbol, p1.name)
+
         ui.display_board(game.board)
-        if game.check_for_win:
-            print("You won")
+
+        value, win_symbol = game.check_for_win()
+        if value:
+            break
+
+        play_turn(ui, game, r1.symbol, r1.name)
+
+        ui.display_board(game.board)
+
+        value, win_symbol = game.check_for_win()
+        if value:
+            break
+
+    if win_symbol == p1.symbol:
+        print(f"{p1.name} Won!")
+    else:
+        print(f"{r1.name} Won!")
+
+
 run()
