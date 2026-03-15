@@ -74,4 +74,9 @@ class Game:
 
 
         return False, None
-        
+    
+    def is_tie(self):
+        for row in self.board:
+            if " " in row:
+                return True
+        return False

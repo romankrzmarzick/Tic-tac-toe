@@ -18,7 +18,7 @@ def run():
     p1 = Character(player_name, player_symbol)
     r1 = Character("robot", robot_symbol)
 
-    while True:
+    while game.is_tie():
 
         play_turn(ui, game, p1.symbol, p1.name)
 
@@ -36,10 +36,14 @@ def run():
         if value:
             break
 
-    if win_symbol == p1.symbol:
-        print(f"{p1.name} Won!")
+    if not game.is_tie():
+        print("Tie!")
     else:
-        print(f"{r1.name} Won!")
+        if win_symbol == p1.symbol:
+            print(f"{p1.name} Won!")
+        else:
+            print(f"{r1.name} Won!")
+
 
 
 run()
