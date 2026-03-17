@@ -1,11 +1,15 @@
 from scripts.character import Character
 from scripts.game import Game
 from scripts.interface import Interface
+import os
 
-def play_turn(ui, game, player_symbol, name):
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def play_turn(ui, game, current_player):
     while True:
-        position = ui.choose_position(game.sqr_wt, name )
-        if game.insert_move(position, player_symbol):
+        position = ui.choose_position(game.sqr_wt, current_player.name )
+        if game.insert_move(position, current_player.symbol):
             break
         ui.invalid_move_message()
 
@@ -14,36 +18,31 @@ def run():
     player_name = ui.choose_name()
     player_symbol, robot_symbol = ui.symbol_nomination()
     game = Game(ui.choose_square_size())
-    
-    p1 = Character(player_name, player_symbol)
-    r1 = Character("robot", robot_symbol)
 
-    while game.is_tie():
+    player = Character(player_name, player_symbol)
+    robot = Character("Robot", robot_symbol)
 
-        play_turn(ui, game, p1.symbol, p1.name)
+    i = 0
+    while not game.tie():
+        turn_number = i % 2
+        current_player = player if turn_number == 0 else robot
 
+        play_turn(ui, game, current_player)
+        clear_screen()
         ui.display_board(game.board)
-
         value, win_symbol = game.check_for_win()
-        if value:
-            break
-
-        play_turn(ui, game, r1.symbol, r1.name)
-
-        ui.display_board(game.board)
-
-        value, win_symbol = game.check_for_win()
-        if value:
-            break
-
-    if not game.is_tie():
-        print("Tie!")
+        
+        if value: break
+        i += 1
+        
+        
+    if win_symbol == player.symbol:
+        print(f"{player.name} Won!")
+    elif win_symbol == robot.symbol:
+        print(f"{robot.name} Won!")
     else:
-        if win_symbol == p1.symbol:
-            print(f"{p1.name} Won!")
-        else:
-            print(f"{r1.name} Won!")
-
-
+        print("Tie!")
+    
+    
 
 run()

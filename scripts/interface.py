@@ -10,11 +10,14 @@ class Interface:
             "main" : "white bold",
             "body" : "white"
         }
+    
+    def helper_board(self, board):
+        pass
 
     def display_board(self, board):
         for row in board:
             self.con.print(f"|{'|'.join(row)}|", style=self.styles['body'])
-
+   
     def choose_square_size(self) -> int:
         size_map = {"3x3" : 3, "5x5" : 5, "7x7" : 7}
         size_choice = [x for x in size_map.keys()]

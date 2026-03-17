@@ -1,3 +1,24 @@
 
+size = 3
+board_3 = [[" " for i in range(size)] for i in range(size)]
+print(board_3)
+board = []
+for i in board_3:
+    board.extend(i)
+print(board)
+for index, val in enumerate(board):
+    board[index] = index
+final_list = []
+for i in range(size):
+    final_list.append(board[(i * size):3 + (i * size)])
+for row_index, row in enumerate(final_list):
+    for col_index, col in enumerate(row):
+        final_list[row_index][col_index] += 1
 
+def create_num_board():
+    for i in final_list:
+        print(f"\n|{'|'.join(map(str, i))}|")
 
+print(board)
+print(final_list)
+create_num_board()

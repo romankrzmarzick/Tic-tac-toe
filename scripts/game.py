@@ -1,30 +1,7 @@
-game_board_9 = [
-    [" ", " ", " "],
-    [" ", " ", " "],
-    [" ", " ", " "]
-]
-game_board_25 = [
-    [" ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " "]
-]
-game_board_49 = [
-    [" ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " "],
-    [" ", " ", " ", " ", " ", " ", " "]
-]
-
-BOARDS = {3 : game_board_9, 5 : game_board_25, 7 : game_board_49}
 
 class Game:
     def __init__(self, size=3):
-        self.board = BOARDS[size]
+        self.board = board_3 = [[" " for i in range(size)] for i in range(size)]
         self.sqr_wt = size
 
     def insert_move(self, position, player_symbol):
@@ -67,7 +44,6 @@ class Game:
         top_right_diagnal = []
         for i in range(self.sqr_wt):
             top_right_diagnal.append(self.board[(self.sqr_wt-1) - i][i])
-        print(top_right_diagnal)
         common_right_diagnal = len(set(top_right_diagnal))
         if not " " in top_right_diagnal and common_right_diagnal <= 1:
                 return True, top_right_diagnal[0]
@@ -75,8 +51,12 @@ class Game:
 
         return False, None
     
-    def is_tie(self):
+    def tie(self):
+        count = 0
         for row in self.board:
-            if " " in row:
-                return True
+            if " " not in row:
+                count += 1
+        if count == self.sqr_wt:
+            return True
         return False
+    
