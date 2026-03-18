@@ -2,14 +2,11 @@ from scripts.character import User
 from scripts.character import Robot
 from scripts.game import Game
 from scripts.interface import Interface
-from scripts.random_ai import RandomAI
-from scripts.minimax_ai import MinimaxAI
-
-import os
+from ai_modules.minimax_ai import MinimaxAI
+from ai_modules.random_ai import RandomAi
 import sys
-
-def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
+from rich.console import Console
+console = Console()
 
 def turn(ui, game, player):
     while True:
@@ -22,21 +19,21 @@ def run():
     ui = Interface()
     player_name = ui.choose_name()
     player_symbol, robot_symbol = ui.symbol_nomination()
-    random_ai = RandomAI()
+    random_ai = RandomAi()
     minimax_ai = MinimaxAI()
 
     while True:
         game = Game()
         player = User(player_name, player_symbol)
-        robot = Robot("Robot", robot_symbol, rand)
+        robot = Robot("Robot", robot_symbol, random_ai)
         ui.num_rule_board(game)
        
         i = 0
-        while not game.tie():
+        while game.empty_space():
             # Uses modulus to switch turns using even and odd numbers.
             turn_number = i % 2
-            turn(ui, game, player) if turn_number == 0 else 
-            clear_screen()
+            turn(ui, game, player) if turn_number == 0 else game.insert_move(robot.robot_move(game.board, game.sqr_wt), robot.symbol)
+            console.clear()
             ui.display_board(game.board)
             value, win_symbol = game.check_for_win()
             

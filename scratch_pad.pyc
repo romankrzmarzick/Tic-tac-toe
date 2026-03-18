@@ -1,27 +1,15 @@
+import random
 
 size = 3
 board_3 = [[" " for i in range(size)] for i in range(size)]
-# board = []
-# for i in board_3:
-#     board.extend(i)
-# for index, val in enumerate(board):
-#     board[index] = index
-# final_list = []
-# for i in range(size):
-#     final_list.append(board[(i * size):3 + (i * size)])
-# for row_index, row in enumerate(final_list):
-#     for col_index, col in enumerate(row):
-#         final_list[row_index][col_index] += 1
 
-# def create_num_board():
-#     for i in final_list:
-#         print(f"|{'|'.join(map(str, i))}|")
+print(board_3)
+board_3[0][2] = "6"
 
-
-
-def num_rule_board():
-    for row_idx in range(3):
-        row_numbers = [(row_idx * 3 + col_idx + 1) for col_idx in range(3)]
-        print(f"|{'|'.join(map(str, row_numbers))}|")
-
-num_rule_board()
+def choose_move(board, size):
+    available_spaces = []
+    for row_index, row in enumerate(board):
+        for col_index, col in enumerate(row):
+            if board[row_index][col_index] == " ":
+                available_spaces.append(row_index * size + col_index) 
+    return random.choice(available_spaces)

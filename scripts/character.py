@@ -12,6 +12,6 @@ class Robot(Character):
         super().__init__(name, symbol)
         self.strategy = strategy
 
-    def robot_move(self, board):
-        return self.strategy.choose_move(board)
+    def robot_move(self, board, size):
+        return self.strategy.choose_move(board, size)
         
