@@ -3,7 +3,7 @@ class Game:
     def __init__(self, size=3):
         self.board = board_3 = [[" " for i in range(size)] for i in range(size)]
         self.sqr_wt = size
-
+        
     def insert_move(self, position, player_symbol):
         if position < 0 or position > (self.sqr_wt * self.sqr_wt): return False
         
@@ -11,27 +11,25 @@ class Game:
         column_index = position % self.sqr_wt
         
         if not self.board[row_index][column_index] == " ": return False
-
         self.board[row_index][column_index] = player_symbol
-        
         return True
     
     def check_for_win(self):
-        # Checks for win in each row.
+        # Checks for win by searching each row.
         for row in self.board:
             symbol = row[0]
             common_row = len(set(row))
             if not " " in row and common_row <= 1:
                 return True, symbol
         
-        # Checks for win in each column.
+        # Checks for win by searching each column.
         for i in range(self.sqr_wt):
             column = [row[i] for row in self.board]
             common_column = len(set(column))
             if not " " in column and common_column <= 1:
                 return True, column[0]
 
-        # Checks for win in diagnal from top-left to bottom-right
+        # Checks for win in diagnal from top-left to bottom-right.
         top_left_diagnal = []
         for i in range(self.sqr_wt):
            top_left_diagnal.append(self.board[i][i])
@@ -40,7 +38,7 @@ class Game:
         if not " " in top_left_diagnal and common_left_diagnal <= 1:
                 return True, top_left_diagnal[0]
 
-        # Checks for win in diagnal from top-right to bottom-left
+        # Checks for win in diagnal from top-right to bottom-left.
         top_right_diagnal = []
         for i in range(self.sqr_wt):
             top_right_diagnal.append(self.board[(self.sqr_wt-1) - i][i])
@@ -52,6 +50,9 @@ class Game:
         return False, None
     
     def tie(self):
+        """ 
+        If each row contains no space, count receives a 1. If count = wt, then it must be a tie.
+        """
         count = 0
         for row in self.board:
             if " " not in row:
