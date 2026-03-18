@@ -21,5 +21,6 @@ share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-scratch_pad.pyc
 MANIFEST
+
+scratch_pad.py
