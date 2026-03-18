@@ -2,7 +2,8 @@ from scripts.character import User
 from scripts.character import Robot
 from scripts.game import Game
 from scripts.interface import Interface
-from scripts.
+from scripts.random_ai import RandomAI
+from scripts.minimax_ai import MinimaxAI
 
 import os
 import sys
@@ -21,18 +22,20 @@ def run():
     ui = Interface()
     player_name = ui.choose_name()
     player_symbol, robot_symbol = ui.symbol_nomination()
-    
+    random_ai = RandomAI()
+    minimax_ai = MinimaxAI()
+
     while True:
         game = Game()
         player = User(player_name, player_symbol)
-        robot = Robot("Robot", robot_symbol, )
+        robot = Robot("Robot", robot_symbol, rand)
         ui.num_rule_board(game)
        
         i = 0
         while not game.tie():
             # Uses modulus to switch turns using even and odd numbers.
             turn_number = i % 2
-            turn(ui, game, player) if turn_number == 0 else robot
+            turn(ui, game, player) if turn_number == 0 else 
             clear_screen()
             ui.display_board(game.board)
             value, win_symbol = game.check_for_win()

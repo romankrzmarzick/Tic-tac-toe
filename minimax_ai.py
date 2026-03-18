@@ -1,2 +1,2 @@
-class Minimax:
+class MinimaxAI:
     pass    
