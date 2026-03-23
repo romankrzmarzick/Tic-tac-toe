@@ -1,2 +1,2 @@
 class MinimaxAI:
-    pass    
+    pass
