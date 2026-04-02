@@ -1,7 +1,7 @@
 import random
 
 class RandomAi:
-    def choose_move(self, board, size):
+    def choose_move(self, board):
         available_spaces = []
         for row_index, row in enumerate(board):
             for col_index, _ in enumerate(row):

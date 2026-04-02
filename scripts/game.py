@@ -7,8 +7,8 @@ class Game:
   
     def insert_move(self, mouse_pos_index, curr_player_num):
         # Add move to board, changing the game state. 
-        if not self.board[mouse_pos_index[1]][mouse_pos_index[0]] == " ": return False
-        self.board[mouse_pos_index[1]][mouse_pos_index[0]] = curr_player_num
+        if not self.board[mouse_pos_index[0]][mouse_pos_index[1]] == " ": return False
+        self.board[mouse_pos_index[0]][mouse_pos_index[1]] = curr_player_num
         return True
     
     def check_for_win(self):

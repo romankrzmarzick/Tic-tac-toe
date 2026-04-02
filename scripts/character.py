@@ -8,7 +8,7 @@ class User(Character):
         super().__init__(name, symbol)
 
     def play(self, game, mouse_pos):
-            game.insert_move(mouse_pos, self.symbol)
+            return game.insert_move(mouse_pos, self.symbol)
             
     
 class Robot(Character):
@@ -16,9 +16,9 @@ class Robot(Character):
         super().__init__(name, symbol)
         self.strategy = strategy
 
-    def robot_move(self, board, size):
-        return self.strategy.choose_move(board, size)
+    def robot_move(self, board):
+        return self.strategy.choose_move(board)
         
     def play(self, game, mouse_pos=None):
-        game.insert_move(self.robot_move(game.board, game.sqr_wt), self.symbol)
+        return game.insert_move(self.robot_move(game.board), self.symbol)
 
