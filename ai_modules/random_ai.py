@@ -5,7 +5,7 @@ class RandomAi:
         available_spaces = []
         for row_index, row in enumerate(board):
             for col_index, _ in enumerate(row):
-                if board[row_index][col_index] == " ":
+                if board[row_index][col_index] == None:
                     available_spaces.append((row_index, col_index)) 
         return random.choice(available_spaces)
 
