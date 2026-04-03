@@ -1,6 +1,6 @@
 import random
 
-class RandomAi:
+class SmartAi:
     def choose_move(self, board):
         available_spaces = []
         for row_index, row in enumerate(board):

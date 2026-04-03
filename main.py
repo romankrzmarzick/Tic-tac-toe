@@ -3,7 +3,8 @@ import sys
 from scripts.game import Game
 from scripts.character import User
 from scripts.character import Robot
-from ai_modules.random_ai import RandomAi
+from ai_modules.smart import SmartAi
+from ai_modules.minimax import MinimaxAi
 
 ASSIGN_NUM = (1, 2)
 WINDOW_SIZE = 600
@@ -28,7 +29,7 @@ class TicTacToe:
         self.clock = pg.time.Clock()
         self.game = Game(GAME_SIZE)
         self.player = User("Player", ASSIGN_NUM[0])
-        self.robot = Robot("Robot", ASSIGN_NUM[1], RandomAi())
+        self.robot = Robot("Robot", ASSIGN_NUM[1], MinimaxAi(ASSIGN_NUM[1], ASSIGN_NUM[0]))
         self.font = pg.font.SysFont("Arial", 40, True)
         self.win_font = pg.font.SysFont("Arial", 75, True)
 
