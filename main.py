@@ -3,8 +3,9 @@ import sys
 from scripts.game import Game
 from scripts.character import User
 from scripts.character import Robot
-from ai_modules.smart import SmartAi
 from ai_modules.minimax import MinimaxAi
+from ai_modules.random_ai import RandomAi
+from ai_modules.smart import SmartAi
 
 ASSIGN_NUM = (1, 2)
 WINDOW_SIZE = 600
