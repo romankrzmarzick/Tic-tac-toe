@@ -4,7 +4,7 @@ class Character:
         self.symbol = symbol
 
 class User(Character):
-    def __init__(self, name, symbol):
+    def __init__(self, name="Player", symbol=1):
         super().__init__(name, symbol)
 
     def play(self, game, mouse_pos):
@@ -12,7 +12,7 @@ class User(Character):
             
     
 class Robot(Character):
-    def __init__(self, name, symbol, strategy):
+    def __init__(self, strategy, name="Robot", symbol=2):
         super().__init__(name, symbol)
         self.strategy = strategy
 
