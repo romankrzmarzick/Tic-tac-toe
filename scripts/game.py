@@ -1,9 +1,9 @@
+from constants import GAME_BOARD_SIZE
 
 class Game:
-    def __init__(self, size):
-        self.board = [[None for _ in range(size)] for _ in range(size)]
-        self.sqr_wt = size
-    
+    def __init__(self):
+        self.sqr_wt = GAME_BOARD_SIZE
+        self.board = [[None for _ in range(GAME_BOARD_SIZE)] for _ in range(GAME_BOARD_SIZE)]
   
     def insert_move(self, mouse_pos_index, curr_player_num):
         # Add move to board, changing the game state. 
@@ -25,21 +25,16 @@ class Game:
             column = [row[i] for row in self.board]
             common_column = len(set(column))
             if not None in column and common_column <= 1:
-                
                 strike_index_col = ((0, i,), (2, i))
-
-
                 return True, column[0], strike_index_col
 
         # Checks for win in diagnal from top-left to bottom-right.
         top_left_diagonal = []
         for i in range(self.sqr_wt):
            top_left_diagonal.append(self.board[i][i])
-        
         common_left_diagonal = len(set(top_left_diagonal))
         if not None in top_left_diagonal and common_left_diagonal <= 1:
                 strike_index_ldiag = ((0, 0), (2, 2))
-
                 return True, top_left_diagonal[0], strike_index_ldiag
 
         # Checks for win in diagnal from top-right to bottom-left.
@@ -50,7 +45,7 @@ class Game:
         if not None in top_right_diagonal and common_right_diagonal <= 1:
                 strike_index_rdiag = (((0, 2), (2, 0)))
                 return True, top_right_diagonal[0], strike_index_rdiag
-
+        
         return False, None, None
     
     def empty_space(self):
