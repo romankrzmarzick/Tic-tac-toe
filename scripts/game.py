@@ -12,12 +12,13 @@ class Game:
         return True
     
     def check_for_win(self):
+        uppper_index = self.sqr_wt - 1
         # Checks for win by searching each row.
         for row_index, row in enumerate(self.board):
             symbol = row[0]
             common_row = len(set(row))
             if not None in row and common_row <= 1:
-                strike_index_row = ((row_index, 0), (row_index, 2))
+                strike_index_row = ((row_index, 0), (row_index, uppper_index))
                 return True, symbol, strike_index_row
         
         # Checks for win by searching each column.
@@ -25,7 +26,7 @@ class Game:
             column = [row[i] for row in self.board]
             common_column = len(set(column))
             if not None in column and common_column <= 1:
-                strike_index_col = ((0, i,), (2, i))
+                strike_index_col = ((0, i,), (uppper_index, i))
                 return True, column[0], strike_index_col
 
         # Checks for win in diagnal from top-left to bottom-right.
@@ -34,7 +35,7 @@ class Game:
            top_left_diagonal.append(self.board[i][i])
         common_left_diagonal = len(set(top_left_diagonal))
         if not None in top_left_diagonal and common_left_diagonal <= 1:
-                strike_index_ldiag = ((0, 0), (2, 2))
+                strike_index_ldiag = ((0, 0), (uppper_index, uppper_index))
                 return True, top_left_diagonal[0], strike_index_ldiag
 
         # Checks for win in diagnal from top-right to bottom-left.
@@ -43,7 +44,7 @@ class Game:
             top_right_diagonal.append(self.board[(self.sqr_wt - 1) - i][i])
         common_right_diagonal = len(set(top_right_diagonal))
         if not None in top_right_diagonal and common_right_diagonal <= 1:
-                strike_index_rdiag = (((0, 2), (2, 0)))
+                strike_index_rdiag = (((0, uppper_index), (uppper_index, 0)))
                 return True, top_right_diagonal[0], strike_index_rdiag
         
         return False, None, None

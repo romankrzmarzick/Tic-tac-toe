@@ -1,4 +1,3 @@
-from enum import Enum, auto
 import pygame
 import sys
 from scripts.game import Game
