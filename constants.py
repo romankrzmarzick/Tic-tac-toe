@@ -1,2 +1,3 @@
-WINDOW_SIZE = 800
-GAME_BOARD_SIZE = 5
+WINDOW_SIZE = 400
+GAME_BOARD_SIZE = 3
+# Game board sizes: 3, 5, 7
