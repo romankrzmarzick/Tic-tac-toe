@@ -1,16 +1,16 @@
 import pygame
-from constants import WINDOW_SIZE, GAME_BOARD_SIZE, symbol_o, symbol_x
+from constants import WINDOW_SIZE, GAME_BOARD_SIZE, SYMBOL_O, SYMBOL_X
 
 class Render:  
     FONT = "Arial" 
     BG_COLOR = (0, 200, 200)
-    COLOR_MAP = {symbol_x : (50, 50, 50), symbol_o : (255, 255, 255)}
+    COLOR_MAP = {SYMBOL_X : (50, 50, 50), SYMBOL_O : (255, 255, 255)}
     def __init__(self, screen):
         self.screen = screen
         self.window_size = WINDOW_SIZE
         self.square_width = GAME_BOARD_SIZE
         self.cell_size = self.window_size // self.square_width
-        self.symbol_map = {symbol_o : self.draw_o, symbol_x : self.draw_x}
+        self.symbol_map = {SYMBOL_O : self.draw_o, SYMBOL_X : self.draw_x}
 
 
     def clear_screen(self):
@@ -22,13 +22,13 @@ class Render:
         return pygame.font.SysFont(self.FONT, size, True)
        
     def draw_o(self, pixel_pos, draw_offset, draw_width):
-        pygame.draw.circle(self.screen, self.COLOR_MAP[symbol_o], pixel_pos, draw_offset, draw_width)
+        pygame.draw.circle(self.screen, self.COLOR_MAP[SYMBOL_O], pixel_pos, draw_offset, draw_width)
 
     def draw_x(self, pixel_pos, draw_offset, draw_width):
-        pygame.draw.line(self.screen, self.COLOR_MAP[symbol_x], pixel_pos, (pixel_pos[0] + draw_offset, pixel_pos[1] + draw_offset),draw_width)
-        pygame.draw.line(self.screen, self.COLOR_MAP[symbol_x], pixel_pos, (pixel_pos[0] - draw_offset, pixel_pos[1] - draw_offset), draw_width)
-        pygame.draw.line(self.screen, self.COLOR_MAP[symbol_x], pixel_pos, (pixel_pos[0] + draw_offset, pixel_pos[1] - draw_offset), draw_width)
-        pygame.draw.line(self.screen, self.COLOR_MAP[symbol_x], pixel_pos, (pixel_pos[0] - draw_offset, pixel_pos[1] + draw_offset), draw_width)
+        pygame.draw.line(self.screen, self.COLOR_MAP[SYMBOL_X], pixel_pos, (pixel_pos[0] + draw_offset, pixel_pos[1] + draw_offset),draw_width)
+        pygame.draw.line(self.screen, self.COLOR_MAP[SYMBOL_X], pixel_pos, (pixel_pos[0] - draw_offset, pixel_pos[1] - draw_offset), draw_width)
+        pygame.draw.line(self.screen, self.COLOR_MAP[SYMBOL_X], pixel_pos, (pixel_pos[0] + draw_offset, pixel_pos[1] - draw_offset), draw_width)
+        pygame.draw.line(self.screen, self.COLOR_MAP[SYMBOL_X], pixel_pos, (pixel_pos[0] - draw_offset, pixel_pos[1] + draw_offset), draw_width)
 
 class RenderPlay(Render):
     LINE_COLOR = (0, 150, 150)  
@@ -40,7 +40,7 @@ class RenderPlay(Render):
         self.draw_offset = self.cell_size * 3 // 9
 
     def convert_index(self, sqr_idx: tuple) -> tuple:
-        """Takes the index agrument and converts to the position on the board in pixels."""
+        """Takes the index argument and converts to the position on the board in pixels."""
    
         col_pix = self.pixel_multiplier * (sqr_idx[0] + sqr_idx[0] + 1)
         row_pix = self.pixel_multiplier * (sqr_idx[1] + sqr_idx[1] + 1)
@@ -65,8 +65,8 @@ class RenderPlay(Render):
         
     def draw_strike(self, strike_pos, winning_symbol):
         """
-        Strike_pos are the two end indices that are passed in from game to help create the strike. 
-        Color is found from the color_strike fucntion.
+        Strike_pos is the two end indices that are passed in from game to help create the strike. 
+        Color is found from the color_strike function.
         """
         color = self.color_strike(winning_symbol)
         pygame.draw.line(self.screen, color, self.convert_index(strike_pos[0]), self.convert_index(strike_pos[1]) , self.draw_width)

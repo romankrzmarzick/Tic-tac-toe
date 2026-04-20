@@ -17,8 +17,8 @@ class Game:
     def check_for_win(self):
         n = self.game_size
 
-        def sum_all(line):
-            return True if len(set(line)) == 1 and None not in line else False
+        def is_winning_line(line):
+            return len(set(line)) == 1 and None not in line 
         
         # Add rows and their index as well for strike index draw.
         rows = ([(row, ((r_i, 0), (r_i, n - 1))) for r_i, row in enumerate(self.board)])
@@ -37,11 +37,11 @@ class Game:
 
         # create list and add helper and another var in chain
         for line, index in chain(rows, cols, diags):
-            if sum_all(line):
+            if is_winning_line(line):
                 return True, line[0], index  
         
         return False, None, None
 
             
-    def empty_space(self):
+    def has_empty_space(self):
         return any(None in row for row in self.board)
