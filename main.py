@@ -21,5 +21,5 @@ class Tictactoe:
             self.clock.tick(60)
 
 
-
 Tictactoe().run()
+

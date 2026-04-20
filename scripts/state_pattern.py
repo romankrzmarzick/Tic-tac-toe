@@ -3,12 +3,9 @@ import sys
 from scripts.game import Game
 from scripts.character import User
 from scripts.character import Robot
-from scripts.renderer import RenderMenu, RenderPlay, RenderReplay
-from ai_modules.random_ai import RandomAi
+from scripts.renderer import RenderPlay, RenderReplay
 from ai_modules.smart_ai import SmartAI
-from constants import WINDOW_SIZE, GAME_BOARD_SIZE
-
-
+from constants import WINDOW_SIZE, GAME_BOARD_SIZE, symbol_o, symbol_x
 
 class State():
     def __init__(self, screen):
@@ -29,24 +26,21 @@ class State():
         row = mouse_pos[1] // (WINDOW_SIZE // GAME_BOARD_SIZE)
         return (row, col)
 
-class Menu(State):
-    def __init__(self, screen):
-        super().__init__(screen)
-
-
 class Play(State):
     def __init__(self, screen):
         super().__init__(screen)
         self.game_over = False
         self.game = Game()
-        self.player = User(1)
-        self.robot = Robot(SmartAI(self.player.symbol, 2), 2)
+        self.player = User(symbol_x)
+        self.robot = Robot(SmartAI(self.player.symbol, symbol_o), symbol_o)
         self.render_play = RenderPlay(screen)
         self.popup_delay = 1000
         self.player_turn = True
         self.end_time = 0
         self.strike_index = None
         self.winning_symbol = None
+        self.move_delay = 450
+        self.last_move = 0
 
     def render(self):
         self.render_play.clear_screen()
@@ -59,15 +53,20 @@ class Play(State):
     def update(self):
         if not self.game_over:  
             current_player = self.player if self.player_turn else self.robot
-            if current_player == self.player and self.mouse_pos is not None:
-                index = self.index_mouse_pos(self.mouse_pos)
-                pygame.time.wait(500)
-                if current_player.play(self.game, index):
-                    self.player_turn = not self.player_turn
-            if current_player == self.robot:
-                pygame.time.wait(500)
-                if current_player.play(self.game, None):
-                    self.player_turn = not self.player_turn
+            
+            now = pygame.time.get_ticks()
+            if now - self.last_move >= self.move_delay:
+                
+                if current_player == self.player and self.mouse_pos is not None:
+                    index = self.index_mouse_pos(self.mouse_pos)
+                    if current_player.play(self.game, index):
+                        self.player_turn = not self.player_turn
+                        self.last_move = now
+
+                if current_player == self.robot:
+                    if current_player.play(self.game, None):
+                        self.player_turn = not self.player_turn
+                        self.last_move = now
 
         is_win, winning_symbol, strike_index,  = self.game.check_for_win()
         
@@ -105,7 +104,6 @@ class End(State):
         self.render_replay.clear_screen()
         self.render_replay.render_button()
         self.render_replay.end_results(self.is_win, self.winning_symbol)
-        self.render_replay.result_message(self.is_win)
 
     def update(self):
         if self.mouse_pos is not None:
