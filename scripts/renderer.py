@@ -102,25 +102,24 @@ class RenderPlay(Render):
         self.line_width = self.window_size // 70
         self.draw_width = self.cell_size // 6
         self.draw_offset = self.cell_size * 3 // 9
-        self.margin = int(self.window_size * 0.05)
 
     def convert_index(self, sqr_idx: tuple) -> tuple:
-        """Convert board indices to pixel positions on the board."""
-        col_pix = self.pixel_multiplier * (sqr_idx[1] + sqr_idx[1] + 1)
-        row_pix = self.pixel_multiplier * (sqr_idx[0] + sqr_idx[0] + 1)
-        return (row_pix, col_pix)
+        """Convert a board (row, col) index to a pixel (x, y) cell centre."""
+        row, col = sqr_idx
+        x = self.pixel_multiplier * (2 * col + 1)
+        y = self.pixel_multiplier * (2 * row + 1)
+        return (x, y)
 
     def draw_board(self):
-        start = self.margin
-        end = self.window_size - self.margin
+        # Interior grid lines span the full board so cells stay evenly spaced.
         for i in range(1, self.square_width):
             pos = self.cell_size * i
-            # vertical line (shadow + line + slim highlight)
-            pygame.draw.line(self.screen, self.GRID_COLOR, (pos, start), (pos, end), self.line_width)
-            pygame.draw.line(self.screen, self.GRID_HILIGHT, (pos, start), (pos, end), max(1, self.line_width // 4))
+            # vertical line (line + slim highlight)
+            pygame.draw.line(self.screen, self.GRID_COLOR, (pos, 0), (pos, self.window_size), self.line_width)
+            pygame.draw.line(self.screen, self.GRID_HILIGHT, (pos, 0), (pos, self.window_size), max(1, self.line_width // 4))
             # horizontal line
-            pygame.draw.line(self.screen, self.GRID_COLOR, (start, pos), (end, pos), self.line_width)
-            pygame.draw.line(self.screen, self.GRID_HILIGHT, (start, pos), (end, pos), max(1, self.line_width // 4))
+            pygame.draw.line(self.screen, self.GRID_COLOR, (0, pos), (self.window_size, pos), self.line_width)
+            pygame.draw.line(self.screen, self.GRID_HILIGHT, (0, pos), (self.window_size, pos), max(1, self.line_width // 4))
 
     def draw_hover(self, cell):
         """Highlight an empty cell under the cursor."""

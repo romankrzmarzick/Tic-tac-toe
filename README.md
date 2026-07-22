@@ -40,5 +40,5 @@ Choose one from the start menu:
 - ai_modules/ — the three AI opponents
 - constants.py — window size, board size, and difficulty settings
 
-The grid is not hard-coded. It currently ships as 5x5 — change `GAME_BOARD_SIZE`
+The grid is not hard-coded. It ships as 3x3 — change `GAME_BOARD_SIZE`
 in constants.py to 3, 5, or 7 and the board, win detection, and AI will adapt.
