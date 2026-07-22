@@ -1,49 +1,44 @@
 # Tic-tac-toe
 
-Tic-tac-toe in Python and pygame, played against the computer. Click a square to take it.
-When the game ends you can click to play again.
+A polished Python and Pygame version of Tic-Tac-Toe against a computer opponent.
+Pick a difficulty from the menu, click a square to play, and use the buttons on the
+results screen to start another round or return to the menu.
 
 ## Running it
 
-You need Python and pygame:
+Install the dependency:
 
-```
+```bash
 pip install pygame
 ```
 
-Then run it from the project folder:
+Start the game from the project folder:
 
-```
+```bash
 python main.py
 ```
 
 ## Controls
 
-Mouse only — click the square you want.
+Mouse only — pick a difficulty on the menu, then click the square you want.
 
-## The computer opponent
+## Difficulty levels
 
-There are two opponents in `ai_modules/`:
+Choose one from the start menu:
 
-- **`random_ai.py`** — picks any open square. Easy to beat.
-- **`smart_ai.py`** — actually tries. In order, it will:
-  1. Take a winning move if it has one
-  2. Block you if you're about to win
-  3. Take the center
-  4. Take a corner
-  5. Otherwise pick at random
+- **Easy** — `random_ai.py`, plays any open square and is simple to beat.
+- **Medium** — `smart_ai.py`, tries to win, blocks your winning move, then takes the center and corners.
+- **Hard** — `minimax_ai.py`, uses minimax with alpha-beta pruning and is unbeatable on a 3x3 board (the search is depth-capped on larger boards to stay responsive).
 
-It's a set of rules rather than a search, so it's quick and hard to beat without being
-literally unbeatable.
+## Project structure
 
-## How it's put together
+- main.py — launches the game loop
+- scripts/state_pattern.py — handles the menu, play, and replay states
+- scripts/game.py — manages the board and win detection
+- scripts/renderer.py — draws the menu, board, symbols, and end screen
+- scripts/character.py — defines the player and robot classes
+- ai_modules/ — the three AI opponents
+- constants.py — window size, board size, and difficulty settings
 
-- `main.py` — starts the game and runs the loop
-- `scripts/state_pattern.py` — handles what screen you're on (playing, game over)
-- `scripts/game.py` — the board and the win checking
-- `scripts/Renderer.py` — draws everything
-- `scripts/character.py` — the players
-- `constants.py` — window and board size
-
-The grid isn't hard-coded to 3×3 — change `GAME_BOARD_SIZE` in `constants.py` to 5 or 7
-and the board, the win check, and the computer opponent all adjust.
+The grid is not hard-coded. It currently ships as 5x5 — change `GAME_BOARD_SIZE`
+in constants.py to 3, 5, or 7 and the board, win detection, and AI will adapt.

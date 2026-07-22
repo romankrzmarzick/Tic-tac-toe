@@ -7,7 +7,7 @@ if ROOT_DIR not in sys.path:
 
 import pygame
 from constants import WINDOW_SIZE
-from scripts.state_pattern import Play
+from scripts.state_pattern import Menu
 
 class Tictactoe:
     def __init__(self):
@@ -15,7 +15,7 @@ class Tictactoe:
         pygame.display.set_caption("TicTacToe")
         self.screen = pygame.display.set_mode([WINDOW_SIZE] * 2)
         self.clock = pygame.time.Clock()
-        self.current_state = Play(self.screen)
+        self.current_state = Menu(self.screen)
     def run(self):
         while True:
             self.current_state.handle_input()
@@ -28,5 +28,6 @@ class Tictactoe:
             self.clock.tick(60)
 
 
-Tictactoe().run()
+if __name__ == "__main__":
+    Tictactoe().run()
 
