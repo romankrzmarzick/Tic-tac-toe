@@ -53,23 +53,15 @@ class Render:
         return pygame.font.SysFont(self.FONT, size, True)
 
     def draw_o(self, pixel_pos, draw_offset, draw_width):
-        cx, cy = pixel_pos
-        # soft shadow, then the ring
-        shadow_off = max(2, draw_width // 4)
-        pygame.draw.circle(self.screen, self.SHADOW_COLOR, (cx + shadow_off, cy + shadow_off), draw_offset, draw_width)
         pygame.draw.circle(self.screen, self.COLOR_MAP[SYMBOL_O], pixel_pos, draw_offset, draw_width)
 
     def draw_x(self, pixel_pos, draw_offset, draw_width):
         cx, cy = pixel_pos
         color = self.COLOR_MAP[SYMBOL_X]
-        shadow_off = max(2, draw_width // 4)
         p1 = (cx - draw_offset, cy - draw_offset)
         p2 = (cx + draw_offset, cy + draw_offset)
         p3 = (cx + draw_offset, cy - draw_offset)
         p4 = (cx - draw_offset, cy + draw_offset)
-        # shadow
-        pygame.draw.line(self.screen, self.SHADOW_COLOR, (p1[0] + shadow_off, p1[1] + shadow_off), (p2[0] + shadow_off, p2[1] + shadow_off), draw_width)
-        pygame.draw.line(self.screen, self.SHADOW_COLOR, (p3[0] + shadow_off, p3[1] + shadow_off), (p4[0] + shadow_off, p4[1] + shadow_off), draw_width)
         # strokes
         pygame.draw.line(self.screen, color, p1, p2, draw_width)
         pygame.draw.line(self.screen, color, p3, p4, draw_width)
@@ -165,22 +157,25 @@ class RenderPlay(Render):
         color = self.color_strike(winning_symbol)
         start = self.convert_index(strike_pos[0])
         end = self.convert_index(strike_pos[1])
-        # glow underlay, then the solid strike
-        glow = pygame.Surface((self.window_size, self.window_size), pygame.SRCALPHA)
-        pygame.draw.line(glow, (*color, 90), start, end, self.draw_width * 2)
-        self.screen.blit(glow, (0, 0))
         pygame.draw.line(self.screen, color, start, end, self.draw_width)
 
 
 class RenderMenu(Render):
+    # Vertical layout anchors, as a fraction of the window height. Each element
+    # is centred on its anchor so the spacing between them stays even.
+    TITLE_CY = 0.19
+    SUBTITLE_CY = 0.33
+    BUTTON_START_CY = 0.48
+    BUTTON_GAP = 0.155
+
     def __init__(self, screen):
         super().__init__(screen)
         self.buttons = {}
-        button_w = int(self.window_size * 0.52)
-        button_h = int(self.window_size * 0.13)
-        cx = self.window_size / 2
-        start_y = self.window_size * 0.44
-        gap = self.window_size * 0.17
+        button_w = int(self.window_size * 0.5)
+        button_h = int(self.window_size * 0.115)
+        cx = int(self.window_size / 2)
+        start_y = self.window_size * self.BUTTON_START_CY
+        gap = self.window_size * self.BUTTON_GAP
         for i, level in enumerate(DIFFICULTIES):
             rect = pygame.Rect(0, 0, button_w, button_h)
             rect.center = (cx, int(start_y + i * gap))
@@ -188,29 +183,29 @@ class RenderMenu(Render):
 
     def render(self, mouse_pos):
         self.clear_screen()
-
-        # Title with X / O accent colours.
-        title_font = self.make_font(0.12)
         cx = self.window_size // 2
-        title_y = int(self.window_size * 0.2)
+
+        # Title "Tic Tac Toe" with X / O accent colours, centred on TITLE_CY.
+        title_font = self.make_font(0.11)
         parts = [("Tic ", (45, 52, 64)), ("Tac ", (250, 250, 252)), ("Toe", (45, 52, 64))]
-        widths = [title_font.size(t)[0] for t, _ in parts]
-        x = cx - sum(widths) // 2
-        for (text, color), w in zip(parts, widths):
-            surf = title_font.render(text, True, color)
-            # subtle shadow
-            shadow = title_font.render(text, True, self.SHADOW_COLOR)
-            self.screen.blit(shadow, (x + 3, title_y + 3))
-            self.screen.blit(surf, (x, title_y))
-            x += w
+        rendered = [(title_font.render(t, True, col),
+                     title_font.render(t, True, self.SHADOW_COLOR)) for t, col in parts]
+        total_w = sum(surf.get_width() for surf, _ in rendered)
+        title_h = max(surf.get_height() for surf, _ in rendered)
+        top = int(self.window_size * self.TITLE_CY) - title_h // 2
+        x = cx - total_w // 2
+        for surf, shadow in rendered:
+            self.screen.blit(shadow, (x + 3, top + 3))
+            self.screen.blit(surf, (x, top))
+            x += surf.get_width()
 
         subtitle_font = self.make_font(0.045)
         subtitle = subtitle_font.render("Choose your difficulty", True, (255, 255, 255))
-        self.screen.blit(subtitle, subtitle.get_rect(center=(cx, int(self.window_size * 0.34))))
+        self.screen.blit(subtitle, subtitle.get_rect(center=(cx, int(self.window_size * self.SUBTITLE_CY))))
 
         for level, rect in self.buttons.items():
             hovered = rect.collidepoint(mouse_pos) if mouse_pos else False
-            self.draw_pill_button(rect, level, 0.052, hovered)
+            self.draw_pill_button(rect, level, 0.05, hovered)
 
 
 class RenderReplay(Render):
