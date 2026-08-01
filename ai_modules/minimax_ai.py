@@ -13,24 +13,18 @@ from constants import GAME_BOARD_SIZE
 
 
 class MinimaxAI:
-    """Unbeatable opponent (on a 3x3 board) using minimax with alpha-beta pruning.
-
-    For larger boards a full search is too expensive, so the search depth is
-    capped and the AI plays a strong-but-not-perfect game there.
-    """
-
+    # unbeatable on 3x3. bigger boards get a depth cap since a full search is too slow
     def __init__(self, player_symbol, robot_symbol):
         self.p_symbol = player_symbol
         self.r_symbol = robot_symbol
         self.n = GAME_BOARD_SIZE
-        # 3x3 is small enough to solve exactly; cap deeper boards for speed.
         self.max_depth = 9 if self.n == 3 else 4
 
     def choose_move(self, board):
         n = self.n
         available = [(r, c) for r, c in product(range(n), repeat=2) if board[r][c] is None]
 
-        # Opening move: skip the full search and grab the center for speed/variety.
+        # first move, just take the center instead of running the whole search
         if len(available) == n * n:
             return (n // 2, n // 2)
 
@@ -93,10 +87,10 @@ class MinimaxAI:
                 return first
             return None
 
-        lines = list(board)  # rows
-        lines += [[board[r][c] for r in range(n)] for c in range(n)]  # columns
-        lines.append([board[i][i] for i in range(n)])  # main diagonal
-        lines.append([board[(n - 1) - i][i] for i in range(n)])  # anti diagonal
+        lines = list(board)
+        lines += [[board[r][c] for r in range(n)] for c in range(n)]
+        lines.append([board[i][i] for i in range(n)])
+        lines.append([board[(n - 1) - i][i] for i in range(n)])
 
         for line in lines:
             w = line_winner(line)

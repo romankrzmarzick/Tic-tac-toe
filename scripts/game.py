@@ -14,8 +14,7 @@ class Game:
         self.board = [[None for _ in range(GAME_BOARD_SIZE)] for _ in range(GAME_BOARD_SIZE)]
   
     def insert_move(self, mouse_pos_index: tuple, curr_player_num):
-        # Add move to board, changing the game state. 
-        if not self.board[mouse_pos_index[0]][mouse_pos_index[1]] is None: 
+        if not self.board[mouse_pos_index[0]][mouse_pos_index[1]] is None:
             return False
         self.board[mouse_pos_index[0]][mouse_pos_index[1]] = curr_player_num
         return True
@@ -25,24 +24,20 @@ class Game:
         n = self.game_size
 
         def is_winning_line(line):
-            return len(set(line)) == 1 and None not in line 
-        
-        # Add rows and their index as well for strike index draw.
+            return len(set(line)) == 1 and None not in line
+
         rows = ([(row, ((r_i, 0), (r_i, n - 1))) for r_i, row in enumerate(self.board)])
 
-        # Add columns and their index to lines
         cols = []
         for c in range(n):
             col = [self.board[r][c] for r in range(n)]
             cols.append((col, ((0, c,), (n - 1, c))))
 
-        # Add diags to lines for chain check in board.
         diags = [
             ([self.board[i][i] for i in range(n)], ((0, 0), (n - 1, n - 1))),
             ([self.board[(n - 1) - i][i] for i in range(n)], ((0, n - 1), (n - 1, 0)))
-            ] 
+            ]
 
-        # create list and add helper and another var in chain
         for line, index in chain(rows, cols, diags):
             if is_winning_line(line):
                 return True, line[0], index  

@@ -12,15 +12,14 @@ from constants import (
 class Render:
     FONT = "Arial"
 
-    # --- Teal colour format (kept from the original design) ---
-    BG_COLOR = (0, 200, 200)          # base teal, kept for compatibility
-    BG_TOP = (0, 214, 208)            # gradient top
-    BG_BOTTOM = (0, 150, 150)         # gradient bottom
-    GRID_COLOR = (0, 138, 138)        # board lines
-    GRID_HILIGHT = (0, 224, 216)      # thin highlight on the lines
-    SHADOW_COLOR = (0, 110, 110)      # soft drop shadow
-    HOVER_COLOR = (255, 255, 255, 55)  # translucent cell hover
-    PANEL_COLOR = (0, 120, 120, 210)  # translucent pill/panel
+    BG_COLOR = (0, 200, 200)
+    BG_TOP = (0, 214, 208)
+    BG_BOTTOM = (0, 150, 150)
+    GRID_COLOR = (0, 138, 138)
+    GRID_HILIGHT = (0, 224, 216)
+    SHADOW_COLOR = (0, 110, 110)
+    HOVER_COLOR = (255, 255, 255, 55)
+    PANEL_COLOR = (0, 120, 120, 210)
     BUTTON_COLOR = (255, 255, 255)
     BUTTON_TEXT = (0, 140, 140)
     FONT_COLOR = (40, 60, 60)
@@ -34,9 +33,8 @@ class Render:
         self.symbol_map = {SYMBOL_O: self.draw_o, SYMBOL_X: self.draw_x}
         self._background = self._build_background()
 
-    # ---------- shared helpers ----------
     def _build_background(self):
-        """Pre-render a vertical teal gradient so we don't recompute each frame."""
+        # pre-render the gradient once instead of drawing it every frame
         surface = pygame.Surface((self.window_size, self.window_size))
         top, bottom = self.BG_TOP, self.BG_BOTTOM
         for y in range(self.window_size):
@@ -62,10 +60,9 @@ class Render:
         p2 = (cx + draw_offset, cy + draw_offset)
         p3 = (cx + draw_offset, cy - draw_offset)
         p4 = (cx - draw_offset, cy + draw_offset)
-        # strokes
         pygame.draw.line(self.screen, color, p1, p2, draw_width)
         pygame.draw.line(self.screen, color, p3, p4, draw_width)
-        # rounded end-caps for a softer look
+        # rounded caps so the ends don't look chopped off
         cap = draw_width // 2
         for point in (p1, p2, p3, p4):
             pygame.draw.circle(self.screen, color, point, cap)
@@ -75,10 +72,9 @@ class Render:
         base = base if base is not None else self.BUTTON_COLOR
         text_color = text_color if text_color is not None else self.BUTTON_TEXT
         radius = rect.height // 2
-        # drop shadow
         shadow = rect.move(0, max(3, self.window_size // 200))
         pygame.draw.rect(self.screen, self.SHADOW_COLOR, shadow, border_radius=radius)
-        # lift the button slightly on hover
+        # lift the button up a bit on hover
         color = tuple(min(255, c + 12) for c in base) if hovered else base
         draw_rect = rect.move(0, -max(2, self.window_size // 320)) if hovered else rect
         pygame.draw.rect(self.screen, color, draw_rect, border_radius=radius)
@@ -86,7 +82,7 @@ class Render:
         text = font.render(label, True, text_color)
         self.screen.blit(text, text.get_rect(center=draw_rect.center))
 
-
+    
 class RenderPlay(Render):
     def __init__(self, screen):
         super().__init__(screen)
@@ -96,25 +92,20 @@ class RenderPlay(Render):
         self.draw_offset = self.cell_size * 3 // 9
 
     def convert_index(self, sqr_idx: tuple) -> tuple:
-        """Convert a board (row, col) index to a pixel (x, y) cell centre."""
         row, col = sqr_idx
         x = self.pixel_multiplier * (2 * col + 1)
         y = self.pixel_multiplier * (2 * row + 1)
         return (x, y)
 
     def draw_board(self):
-        # Interior grid lines span the full board so cells stay evenly spaced.
         for i in range(1, self.square_width):
             pos = self.cell_size * i
-            # vertical line (line + slim highlight)
             pygame.draw.line(self.screen, self.GRID_COLOR, (pos, 0), (pos, self.window_size), self.line_width)
             pygame.draw.line(self.screen, self.GRID_HILIGHT, (pos, 0), (pos, self.window_size), max(1, self.line_width // 4))
-            # horizontal line
             pygame.draw.line(self.screen, self.GRID_COLOR, (0, pos), (self.window_size, pos), self.line_width)
             pygame.draw.line(self.screen, self.GRID_HILIGHT, (0, pos), (self.window_size, pos), max(1, self.line_width // 4))
 
     def draw_hover(self, cell):
-        """Highlight an empty cell under the cursor."""
         row, col = cell
         inset = int(self.cell_size * 0.06)
         rect = pygame.Rect(
@@ -137,7 +128,6 @@ class RenderPlay(Render):
                     self.symbol_map[cell](pixel_cord, self.draw_offset, self.draw_width)
 
     def draw_status(self, text):
-        """Draw a translucent status pill near the top of the board."""
         font = self.make_font(0.045)
         label = font.render(text, True, (255, 255, 255))
         pad_x = int(self.window_size * 0.03)
@@ -185,7 +175,6 @@ class RenderMenu(Render):
         self.clear_screen()
         cx = self.window_size // 2
 
-        # Title "Tic Tac Toe" with X / O accent colours, centred on TITLE_CY.
         title_font = self.make_font(0.11)
         parts = [("Tic ", (45, 52, 64)), ("Tac ", (250, 250, 252)), ("Toe", (45, 52, 64))]
         rendered = [(title_font.render(t, True, col),

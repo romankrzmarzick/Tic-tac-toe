@@ -27,7 +27,6 @@ from constants import (
 
 
 def make_strategy(difficulty, player_symbol, robot_symbol):
-    """Return the AI strategy that matches the chosen difficulty."""
     if difficulty == EASY:
         return RandomAi()
     if difficulty == HARD:
@@ -50,7 +49,6 @@ class State():
                 self.mouse_pos = pygame.mouse.get_pos()
 
     def index_mouse_pos(self, mouse_pos):
-        # mouse_pos = (x, y)
         col = mouse_pos[0] // (WINDOW_SIZE // GAME_BOARD_SIZE)
         row = mouse_pos[1] // (WINDOW_SIZE // GAME_BOARD_SIZE)
         return (row, col)
@@ -96,7 +94,6 @@ class Play(State):
         self.render_play.clear_screen()
         self.render_play.draw_board()
 
-        # Highlight the empty cell under the cursor on the player's turn.
         if not self.game_over and self.current_player is self.player:
             row, col = self.index_mouse_pos(pygame.mouse.get_pos())
             if 0 <= row < GAME_BOARD_SIZE and 0 <= col < GAME_BOARD_SIZE \
@@ -141,7 +138,7 @@ class Play(State):
             self.strike_index = strike_index
             self.winning_symbol = winning_symbol
 
-            # Creates a delay between strike and replay screen.
+            # delay before switching to the replay screen
             if self.end_time == 0:
                 self.end_time = pygame.time.get_ticks()
 
@@ -154,7 +151,7 @@ class Play(State):
             current_time = pygame.time.get_ticks()
 
             if current_time - self.end_time >= self.popup_delay:
-                # A win only counts for the human player.
+                # only the human winning counts as a win for the results screen
                 player_won = is_win and winning_symbol == self.player.symbol
                 return End(self.screen, player_won, winning_symbol, self.difficulty)
         return None
